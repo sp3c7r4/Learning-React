@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 const App = () => {
-  const [name, setName] = useState(() => {
-    const savedName = localStorage.getItem("name");
-    return savedName ? savedName : "";
-  });
+  /* Store data */
+  const [data, setData] = useState([])
+  /* Fetching Data */
   useEffect(() => {
-    localStorage.setItem('name', "Mera")
-  }, [name])
-  const handleChange = (event) => {
-    setName(event.target.value)
-  }
-  const handleClear = () => setName('')
+    async function getData() {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+      const data = await response.json()
+      if (data && data.length) setData(data);
+    }
+    getData()
+  }, [])
   return (
     <div>
-     <h1>Your Name: {name}</h1>
-     <input type="text" value={name} onChange={handleChange} placeholder="Enter your name"/><button onClick={handleClear}>Clear Name</button>
+      <ul>
+        {data.map((item) => (
+          <section key={item.id}>
+            <li>Title: {item.title} </li>
+            <li>Body: {item.body} </li>
+          </section>
+        ))}
+      </ul>
     </div>
 	)
 }
