@@ -1,14 +1,17 @@
-import { createContext } from 'react'
-import UserProfile from './UserProfile'
+import { createContext, useState } from 'react'
 
-export const User = createContext()
-function UserContext() {
-  const user = 'Spectra'
+const UserContext = createContext()
+
+const UserProvider = ({children}) => {
+  const [user, setUser] = useState({name: "Spectra"})
+  const updateUser = (newName) => {
+    setUser({name: newName})
+  }
   return (
-    <User.Provider value={user}>
-      <UserProfile/>
-    </User.Provider>
+    <UserContext.Provider value={{user, updateUser}}>
+      {children}
+    </UserContext.Provider>
   )
 }
 
-export default UserContext
+export {UserProvider, UserContext}

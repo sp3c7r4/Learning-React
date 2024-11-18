@@ -1,27 +1,15 @@
-import { useState } from "react"
+import { useReducer } from "react"
+import reducer from "./counterReducer"
 
 export default function Counter() {
-  const [name, setName] = useState("")
-  const [quantity, setQuantity] = useState(0)
-  const [arrayObject, setArrayObject] = useState([])
-  const addItems = () => {
-    const newItem = {
-      name: name,
-      quantity: parseInt(quantity)
-    }
-    setArrayObject([...arrayObject, newItem])
-  }
-  
+  const initialData = {count: 0}
+  const [state, dispatch] = useReducer(reducer, initialData)
   return (
     <div>
-        <input type="text" placeholder="Name" onChange={(e) => setName(() => e.target.value)} />
-        <input type="text" placeholder="Quantity" onChange={(e) => setQuantity(() => e.target.value)} />
-        <button onClick={addItems}>Add new item</button>
-      <ul>
-        {arrayObject.map((items, index) => (
-          <li key={index}>Name: {items?.name}, Quantity: {items?.quantity}</li>
-        ))}
-      </ul>
+       <h1>Count: {state.count}</h1>
+       <button onClick={() => dispatch({type: 'increment'})}>Increase</button>
+       <button onClick={() => dispatch({type: 'decrement'})}>Decrease</button>
+       <button onClick={() => dispatch({type: 'incrementBy', value: 4})}>Increase By 4</button>
     </div>
   )
 }
